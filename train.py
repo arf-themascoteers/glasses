@@ -19,7 +19,7 @@ def train(device):
     model.fc = nn.Linear(num_ftrs, 2)
     model.to(device)
     optimizer = torch.optim.Adam(model.parameters(), lr=1e-3, weight_decay=1e-5)
-    num_epochs = 3
+    num_epochs = 10
     n_batches = int(len(cid)/batch_size) + 1
     batch_number = 0
     loss = None

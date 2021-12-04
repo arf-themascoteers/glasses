@@ -11,9 +11,9 @@ import matplotlib.pyplot as plt
 
 
 class CustomImageDataset(Dataset):
-    def __init__(self, is_test=True):
+    def __init__(self, is_train=True):
         self.file = "data/train.csv"
-        if is_test is False:
+        if is_train is False:
             self.file = "data/test.csv"
         self.img_labels = pd.read_csv(self.file)
         self.img_dir = "data/faces"

@@ -7,11 +7,11 @@ from torch.utils.data import DataLoader
 
 def test(device):
     batch_size = 50
-    cid = CustomImageDataset(is_test=False)
+    cid = CustomImageDataset(is_train=False)
     dataloader = DataLoader(cid, batch_size=batch_size, shuffle=True)
     model = torchvision.models.resnet18(pretrained=True)
     model.eval()
-    model.load_state_dict(torch.load("models/cnn.h5"))
+    model.load_state_dict(torch.load("models/cnn_trans.h5"))
     model.to(device)
     correct = 0
     total = 0

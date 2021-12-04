@@ -8,7 +8,7 @@ from torch.utils.data import DataLoader
 
 def train(device):
     batch_size = 50
-    cid = CustomImageDataset(is_test=True)
+    cid = CustomImageDataset(is_train=True)
     dataloader = DataLoader(cid, batch_size=batch_size, shuffle=True)
     model = torchvision.models.resnet18(pretrained=True)
     model.train()
@@ -36,4 +36,4 @@ def train(device):
             batch_number += 1
             print(f'Epoch:{epoch + 1}, Batch: {batch_number+1}, Loss:{loss.item():.4f}')
 
-    torch.save(model.state_dict(), 'models/cnn.h5')
+    torch.save(model.state_dict(), 'models/cnn_trans.h5')

@@ -9,8 +9,9 @@ from torch.utils.data import DataLoader
 
 
 def train(device):
+    batch_size = 50
     cid = CustomImageDataset(is_test=True)
-    dataloader = DataLoader(cid, batch_size=50, shuffle=True)
+    dataloader = DataLoader(cid, batch_size=batch_size, shuffle=True)
     model = torchvision.models.resnet18(pretrained=True)
     model.train()
     for param in model.parameters():
@@ -21,8 +22,11 @@ def train(device):
     model.to(device)
     optimizer = torch.optim.Adam(model.parameters(), lr=1e-3, weight_decay=1e-5)
     num_epochs = 3
+    n_batches = len(cid)/batch_size + 1
+    batch_number = 0
     loss = None
     for epoch in range(num_epochs):
+        batch_number = 0
         for (x, y) in dataloader:
             x = x.to(device)
             y = y.to(device)
@@ -31,6 +35,7 @@ def train(device):
             loss = F.nll_loss(y_hat, y)
             loss.backward()
             optimizer.step()
-        print(f'Epoch:{epoch + 1}, Loss:{loss.item():.4f}')
+            batch_number += 1
+            print(f'Epoch:{epoch + 1}, Batch: {batch_number+1}, Loss:{loss.item():.4f}')
 
     torch.save(model.state_dict(), 'models/cnn.h5')

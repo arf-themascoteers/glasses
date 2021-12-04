@@ -7,7 +7,7 @@ from torch.utils.data import DataLoader
 
 
 def train(device):
-    batch_size = 100
+    batch_size = 1000
     cid = CustomImageDataset(is_train=True)
     dataloader = DataLoader(cid, batch_size=batch_size, shuffle=True)
     model = torchvision.models.resnet18(pretrained=True)
@@ -19,7 +19,7 @@ def train(device):
     model.fc = nn.Linear(num_ftrs, 2)
     model.to(device)
     optimizer = torch.optim.Adam(model.parameters(), lr=1e-3, weight_decay=1e-5)
-    num_epochs = 10
+    num_epochs = 5
     n_batches = int(len(cid)/batch_size) + 1
     batch_number = 0
     loss = None

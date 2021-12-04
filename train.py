@@ -1,6 +1,4 @@
 import torch
-from torchvision import datasets, transforms
-import cnn
 import torch.nn.functional as F
 from glasses_dataset import CustomImageDataset
 import torchvision

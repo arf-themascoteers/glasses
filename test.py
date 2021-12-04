@@ -1,22 +1,21 @@
 import torch
+from glasses_dataset import CustomImageDataset
+import torchvision
 import torch.nn as nn
-from torchvision import datasets, transforms
-import matplotlib.pyplot as plt
-import cnn
+from torch.utils.data import DataLoader
 
 
 def test(device):
-    mnist_data = datasets.MNIST(root='./data', train=True, download=True, transform=transforms.ToTensor())
-    data_loader = torch.utils.data.DataLoader(dataset=mnist_data, batch_size=64, shuffle=True)
-
-    model = cnn.SimpleCNN()
-    model = model.to(device)
+    batch_size = 50
+    cid = CustomImageDataset(is_test=False)
+    dataloader = DataLoader(cid, batch_size=batch_size, shuffle=True)
+    model = torchvision.models.resnet18(pretrained=True)
     model.eval()
     model.load_state_dict(torch.load("models/cnn.h5"))
+    model.to(device)
     correct = 0
     total = 0
-
-    for (x, y) in data_loader:
+    for (x, y) in dataloader:
         x = x.to(device)
         y = y.to(device)
         y_hat = model(x)

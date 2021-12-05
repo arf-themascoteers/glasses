@@ -1,3 +1,6 @@
+**Setup**
+
+
 **Install**
 
 pip install -r requirements.txt
@@ -6,4 +9,6 @@ pip install -r requirements.txt
 
 Run main.py
 
-**Screenshot**
+**Base Dataset**
+https://www.kaggle.com/jessicali9530/celeba-dataset
+

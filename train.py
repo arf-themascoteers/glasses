@@ -16,7 +16,12 @@ def train(device):
         param.requires_grad = False
 
     num_ftrs = model.fc.in_features
-    model.fc = nn.Linear(num_ftrs, 2)
+    model.fc = nn.Sequential(
+        nn.Linear(num_ftrs, 256),
+        nn.Linear(256, 128),
+        nn.Linear(128, 64),
+        nn.Linear(64, 2)
+    )
     model.to(device)
     optimizer = torch.optim.Adam(model.parameters(), lr=1e-3, weight_decay=1e-5)
     num_epochs = 5
@@ -37,3 +42,7 @@ def train(device):
             print(f'Epoch:{epoch + 1} (of {num_epochs}), Batch: {batch_number} of ({n_batches}), Loss:{loss.item():.4f}')
 
     torch.save(model, 'models/cnn_trans.h5')
+
+if __name__ == "__main__":
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    train(device)

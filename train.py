@@ -12,8 +12,9 @@ def train(device):
     dataloader = DataLoader(cid, batch_size=batch_size, shuffle=True)
     model = torchvision.models.resnet18(pretrained=True)
     model.train()
-    for param in model.parameters():
-        param.requires_grad = False
+    # To freeze upper layers, uncomment following lines
+    # for param in model.parameters():
+    #     param.requires_grad = False
 
     num_ftrs = model.fc.in_features
     model.fc = nn.Sequential(

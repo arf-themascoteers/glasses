@@ -1,7 +1,10 @@
+**Base Dataset**
+
+https://www.kaggle.com/jessicali9530/celeba-dataset
+
 **Setup**
 
-
-**Install**
+Download the dataset and put all the jpg images in the data/faces folder
 
 pip install -r requirements.txt
 
@@ -9,6 +12,4 @@ pip install -r requirements.txt
 
 Run main.py
 
-**Base Dataset**
-https://www.kaggle.com/jessicali9530/celeba-dataset
 

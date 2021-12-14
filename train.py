@@ -22,7 +22,6 @@ def train(device):
     dataloader = DataLoader(cid, batch_size=batch_size, shuffle=False)
 
     num_epochs = 3
-    n_batches = int(len(cid)/batch_size) + 1
     batch_number = 0
     loss = None
     total_accuracy = 0
@@ -48,7 +47,7 @@ def train(device):
                     loss.backward()
                     optimizer.step()
                     batch_number += 1
-                    print(f'Epoch:{epoch + 1} (of {num_epochs}), Batch: {batch_number} of ({n_batches}), Loss:{loss.item():.4f}')
+                    print(f'Epoch:{epoch + 1} (of {num_epochs}), Batch: {batch_number} of ({NUM_BATCHES}), Loss:{loss.item():.4f}')
 
         x, y = get_data_batch(dataloader, validation_batch)
         accuracy = validate.validate(model, x, y)
@@ -59,6 +58,9 @@ def train(device):
         if accuracy < min_accuracy:
             min_accuracy = accuracy
 
+    print(f"Min Accuracy: {min_accuracy}")
+    print(f"Max Accuracy: {max_accuracy}")
+    print(f"Average Accuracy: {total_accuracy/NUM_BATCHES}")
 
     torch.save(best_model, 'models/cnn_trans.h5')
 

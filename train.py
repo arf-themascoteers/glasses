@@ -1,26 +1,13 @@
 import torch
 import torch.nn.functional as F
-from glasses_dataset import CustomImageDataset
-import torchvision
-import torch.nn as nn
+from train_dataset import KFoldTrainDataset
 from torch.utils.data import DataLoader
 from machine import Machine
 import validate
 import math
 
-def get_data_batch(dataloader, batch):
-    i = 0
-    for (x, y) in dataloader:
-        if i == batch:
-            return x,y
-        i += 1
 
 def train(device):
-    NUM_BATCHES = 10
-    cid = CustomImageDataset(is_train=True)
-    batch_size = int(len(cid)/NUM_BATCHES)
-    dataloader = DataLoader(cid, batch_size=batch_size, shuffle=False)
-
     num_epochs = 3
     batch_number = 0
     loss = None
@@ -29,28 +16,38 @@ def train(device):
     max_accuracy = -math.inf
     best_model = None
 
-    for validation_batch in range(NUM_BATCHES):
+    kfd = KFoldTrainDataset()
+
+
+    for validation_batch in range(kfd.K):
         model = Machine()
         model.train()
         model.to(device)
         optimizer = torch.optim.Adam(model.parameters(), lr=1e-3, weight_decay=1e-5)
 
         for epoch in range(num_epochs):
-            for train_batch in range(NUM_BATCHES):
+            for train_batch in range(kfd.K):
                 if train_batch is not validation_batch:
-                    x, y = get_data_batch(dataloader, train_batch)
-                    x = x.to(device)
-                    y = y.to(device)
-                    optimizer.zero_grad()
-                    y_hat = model(x)
-                    loss = F.cross_entropy(y_hat, y)
-                    loss.backward()
-                    optimizer.step()
-                    batch_number += 1
-                    print(f'Epoch:{epoch + 1} (of {num_epochs}), Batch: {batch_number} of ({NUM_BATCHES}), Loss:{loss.item():.4f}')
+                    sub_dataset = kfd.get_dataset(train_batch)
+                    batch_size = 100
+                    dataloader = DataLoader(sub_dataset, batch_size=batch_size, shuffle=True)
+                    NUM_BATCHES = int(len(sub_dataset)/batch_size) + 1
+                    batch_number = 0
+                    for x,y in dataloader:
+                        x = x.to(device)
+                        y = y.to(device)
+                        optimizer.zero_grad()
+                        y_hat = model(x)
+                        loss = F.cross_entropy(y_hat, y)
+                        loss.backward()
+                        optimizer.step()
+                        batch_number += 1
+                        print(f'Validation Batch: {validation_batch + 1}, Epoch:{epoch + 1} (of {num_epochs}),'
+                              f' Training Batch: {train_batch}'
+                              f' Dataloader Batch: {batch_number} of ({NUM_BATCHES}), Loss:{loss.item():.4f}')
 
-        x, y = get_data_batch(dataloader, validation_batch)
-        accuracy = validate.validate(model, x, y)
+        validation_dataset = kfd.datasets[validation_batch]
+        accuracy = validate.validate(model, validation_dataset)
         total_accuracy += accuracy
         if accuracy > max_accuracy:
             max_accuracy = accuracy

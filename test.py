@@ -1,5 +1,5 @@
 import torch
-from glasses_dataset import CustomImageDataset
+from dataset import CustomImageDataset
 import torchvision
 import torch.nn as nn
 from torch.utils.data import DataLoader

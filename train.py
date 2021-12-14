@@ -4,28 +4,17 @@ from glasses_dataset import CustomImageDataset
 import torchvision
 import torch.nn as nn
 from torch.utils.data import DataLoader
-
+from machine import Machine
 
 def train(device):
-    batch_size = 1000
+    batch_size = 300
     cid = CustomImageDataset(is_train=True)
     dataloader = DataLoader(cid, batch_size=batch_size, shuffle=True)
-    model = torchvision.models.resnet18(pretrained=True)
+    model = Machine()
     model.train()
-    # To freeze upper layers, uncomment following lines
-    # for param in model.parameters():
-    #     param.requires_grad = False
-
-    num_ftrs = model.fc.in_features
-    model.fc = nn.Sequential(
-        nn.Linear(num_ftrs, 256),
-        nn.Linear(256, 128),
-        nn.Linear(128, 64),
-        nn.Linear(64, 2)
-    )
     model.to(device)
     optimizer = torch.optim.Adam(model.parameters(), lr=1e-3, weight_decay=1e-5)
-    num_epochs = 5
+    num_epochs = 3
     n_batches = int(len(cid)/batch_size) + 1
     batch_number = 0
     loss = None

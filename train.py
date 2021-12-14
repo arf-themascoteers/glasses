@@ -63,7 +63,7 @@ def train(device):
     datasets = KFoldTrainDataset()
 
     for validation_batch in range(datasets.folds):
-        model = train_for_validation_batch(validation_batch, datasets, device)
+        model = train_for_validation_batch(device, datasets, validation_batch)
         validation_dataset = datasets.datasets[validation_batch]
         accuracy = validate(model, device, validation_dataset)
 

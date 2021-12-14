@@ -8,6 +8,7 @@ from torch.utils.data import Dataset
 from torch.utils.data import DataLoader
 from torchvision import transforms
 import matplotlib.pyplot as plt
+import random
 
 
 class CustomImageDataset(Dataset):
@@ -22,11 +23,14 @@ class CustomImageDataset(Dataset):
             transforms.CenterCrop(178),
             transforms.Resize(64),
         ])
+        self.indices = list(range(len(self.img_labels)))
+        random.shuffle(self.indices)
 
     def __len__(self):
         return len(self.img_labels)
 
     def __getitem__(self, idx):
+        idx = self.indices[idx]
         img_path = os.path.join(self.img_dir, self.img_labels.iloc[idx, 0])
         image = PIL.Image.open(img_path)
         image = self.transforms(image)

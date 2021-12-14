@@ -25,29 +25,29 @@ def train(device):
         model.to(device)
         optimizer = torch.optim.Adam(model.parameters(), lr=1e-3, weight_decay=1e-5)
 
-        for epoch in range(num_epochs):
-            for train_batch in range(kfd.K):
-                if train_batch is not validation_batch:
-                    sub_dataset = kfd.get_dataset(train_batch)
-                    batch_size = 100
-                    dataloader = DataLoader(sub_dataset, batch_size=batch_size, shuffle=True)
-                    NUM_BATCHES = int(len(sub_dataset)/batch_size) + 1
-                    batch_number = 0
-                    for x,y in dataloader:
-                        x = x.to(device)
-                        y = y.to(device)
-                        optimizer.zero_grad()
-                        y_hat = model(x)
-                        loss = F.cross_entropy(y_hat, y)
-                        loss.backward()
-                        optimizer.step()
-                        batch_number += 1
-                        print(f'Validation Batch: {validation_batch + 1}, Epoch:{epoch + 1} (of {num_epochs}),'
-                              f' Training Batch: {train_batch}'
-                              f' Dataloader Batch: {batch_number} of ({NUM_BATCHES}), Loss:{loss.item():.4f}')
+        # for epoch in range(num_epochs):
+        #     for train_batch in range(kfd.K):
+        #         if train_batch is not validation_batch:
+        #             sub_dataset = kfd.get_dataset(train_batch)
+        #             batch_size = 100
+        #             dataloader = DataLoader(sub_dataset, batch_size=batch_size, shuffle=True)
+        #             NUM_BATCHES = int(len(sub_dataset)/batch_size) + 1
+        #             batch_number = 0
+        #             for x,y in dataloader:
+        #                 x = x.to(device)
+        #                 y = y.to(device)
+        #                 optimizer.zero_grad()
+        #                 y_hat = model(x)
+        #                 loss = F.cross_entropy(y_hat, y)
+        #                 loss.backward()
+        #                 optimizer.step()
+        #                 batch_number += 1
+        #                 print(f'Validation Batch: {validation_batch + 1}, Epoch:{epoch + 1} (of {num_epochs}),'
+        #                       f' Training Batch: {train_batch}'
+        #                       f' Dataloader Batch: {batch_number} of ({NUM_BATCHES}), Loss:{loss.item():.4f}')
 
         validation_dataset = kfd.datasets[validation_batch]
-        accuracy = validate.validate(model, validation_dataset)
+        accuracy = validate.validate(model, device, validation_dataset)
         total_accuracy += accuracy
         if accuracy > max_accuracy:
             max_accuracy = accuracy
@@ -57,7 +57,7 @@ def train(device):
 
     print(f"Min Accuracy: {min_accuracy}")
     print(f"Max Accuracy: {max_accuracy}")
-    print(f"Average Accuracy: {total_accuracy/NUM_BATCHES}")
+    print(f"Average Accuracy: {total_accuracy/kfd.K}")
 
     torch.save(best_model, 'models/cnn_trans.h5')
 

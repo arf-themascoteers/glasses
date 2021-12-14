@@ -11,18 +11,18 @@ import dataset
 
 
 class KFoldTrainDataset:
-    def __init__(self, k = 10):
-        self.K = k
+    def __init__(self, folds = 10):
+        self.folds = folds
         self.file = "data/train.csv"
         self.img_labels = pd.read_csv(self.file)
 
         total_images = len(self.img_labels.index)
-        train_batch = int(total_images/self.K)
-        train_images = train_batch * self.K
+        train_batch = int(total_images / self.folds)
+        train_images = train_batch * self.folds
         self.indices = list(range(train_images))
         random.shuffle(self.indices)
         self.datasets = []
-        for i in range(self.K):
+        for i in range(self.folds):
             x_i = []
             y_i = []
             start = i * train_batch

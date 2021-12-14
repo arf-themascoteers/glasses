@@ -1,14 +1,10 @@
 import torch
-from dataset import CustomImageDataset
-import torchvision
-import torch.nn as nn
 from torch.utils.data import DataLoader
-
+import test_dataset
 
 def test(device):
-    batch_size = 50
-    cid = CustomImageDataset(is_train=False)
-    dataloader = DataLoader(cid, batch_size=batch_size, shuffle=False)
+    cid = test_dataset.TestDataset()
+    dataloader = DataLoader(cid.dataset, batch_size=1000, shuffle=False)
     model = torch.load("models/cnn_trans.h5")
     model.eval()
     model.to(device)

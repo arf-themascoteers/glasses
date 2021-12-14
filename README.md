@@ -14,4 +14,11 @@ Install PyTorch:https://pytorch.org/get-started/locally/
 
 Run main.py
 
+**Result**
+
+Trad Machine: 96.47
+
+Our Machine: 97.66
+
+Our Machine With Relu: 97.81
 

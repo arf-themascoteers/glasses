@@ -4,13 +4,13 @@ from glasses_dataset import CustomImageDataset
 import torchvision
 import torch.nn as nn
 from torch.utils.data import DataLoader
-from machine import Machine
+import machine_provider
 
 def train(device):
-    batch_size = 300
+    batch_size = 1000
     cid = CustomImageDataset(is_train=True)
     dataloader = DataLoader(cid, batch_size=batch_size, shuffle=True)
-    model = Machine()
+    model = machine_provider.get_machine()
     model.train()
     model.to(device)
     optimizer = torch.optim.Adam(model.parameters(), lr=1e-3, weight_decay=1e-5)

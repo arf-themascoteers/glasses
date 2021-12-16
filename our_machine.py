@@ -10,6 +10,7 @@ class OurMachine(nn.Module):
         number_input = self.resnet.fc.out_features
         self.fc = nn.Sequential(
             nn.Linear(number_input, 256),
+            nn.BatchNorm1d(256),
             nn.ReLU(),
             nn.Linear(256, 2)
         )

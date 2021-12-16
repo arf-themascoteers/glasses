@@ -29,8 +29,7 @@ Facts:
    
 4. Layer-wise fine tuning (**not implemented**)
 
-5. Normalisation/Regularisation - normalize and scale input activations of augmented
-layers - L2/Batch (**not implemented**)
+5. Normalisation/Regularisation - normalize and scale input activations of augmented layers 
 
 ##Referred Papers
 

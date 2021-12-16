@@ -17,9 +17,6 @@ class OurMachine(nn.Module):
         for param in self.resnet.layer1.parameters():
             param.requires_grad = False
 
-        for param in self.resnet.layer2.parameters():
-            param.requires_grad = False
-
     def forward(self, x):
         x = self.resnet(x)
         x = self.fc(x)

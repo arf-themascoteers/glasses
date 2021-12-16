@@ -39,3 +39,6 @@ Facts:
 5. Normalisation/Regularisation - normalize and scale input activations of augmented
 layers - L2/Batch (**not implemented**)
 
+##Referred Papers
+
+
